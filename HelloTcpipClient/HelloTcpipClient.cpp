@@ -36,6 +36,17 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
+	// 2.1 - TCP_NODELAY 옵션을 주는 경우
+	// 버퍼에서 대기하는 시간없이 데이터를 전송한다.
+	// WireShark에서 확인해보면 PSH로 보내지는 것을 확인할 수 있다.
+	// 빠른 반응 속도가 필요한 TCP 기반 게임 등에서 해당 옵션을 사용할 수 있다.
+	// 여기서 궁금한 점은, 서버 쪽에도 NODELAY 옵션을 줘야 할까?
+	// 보편적인 답으로는 서버 쪽에는 NODELAY 옵션을 줄 필요가 없다.
+	// NODELAY 옵션은 클라이언트 쪽에서 많이 설정한다.
+	// 이유는 추후 설명.
+	int nOpt = 1;
+	::setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (char*)&nOpt, sizeof(nOpt));
+
 	//3. 채팅 메시지 송/수신
 	char szBuffer[128] = { 0 };
 	while (1)
